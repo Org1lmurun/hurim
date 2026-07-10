@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zohan & Rose - Хуримын урилга</title>
+    <title>Temka & Naransolongo - Хуримын урилга</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
@@ -266,7 +266,7 @@
         <section>
             <h2>Wedding Day</h2>
             <div class="date-badge">27.09.2026</div>
-            <div class="serif-title">Zohan & Rose</div>
+            <div class="serif-title">Temka & Naransolongo</div>
             <p style="font-style: italic; color: #666;">Scroll Down</p>
         </section>
 
@@ -311,22 +311,24 @@
             
             <form class="rsvp-form" onsubmit="submitRSVP(event)">
                 <div>
-                    <label>Таны нэр</label>
-                    <input type="text" required placeholder="Бүтэн нэрээ оруулна уу">
-                </div>
-                <div>
-                    <label>Та ирэх үү?</label>
-                    <select required>
-                        <option value="yes">Баяртайгаар оролцоно</option>
-                        <option value="no">Оролцох боломжгүй</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Дагуулж ирэх хүний тоо</label>
-                    <input type="number" min="0" max="5" value="0">
-                </div>
-                <button type="submit" class="submit-btn">Илгээх</button>
-            </form>
+                   <form action=https://formspree.io/f/mkoldoyg method="POST" class="rsvp-form">
+    <div>
+        <label>Таны нэр</label>
+        <input type="text" name="Нэр" required placeholder="Бүтэн нэрээ оруулна уу">
+    </div>
+    <div>
+        <label>Та ирэх үү?</label>
+        <select name="Ирэх_эсэх" required>
+            <option value="Тийм, баяртайгаар оролцоно">Баяртайгаар оролцоно</option>
+            <option value="Үгүй, оролцох боломжгүй">Оролцох боломжгүй</option>
+        </select>
+    </div>
+    <div>
+        <label>Дагуулж ирэх хүний тоо</label>
+        <input type="number" name="Дагалдах_хүний_тоо" min="0" max="5" value="0">
+    </div>
+    <button type="submit" class="submit-btn">Илгээх</button>
+</form>
         </section>
     </div>
 
