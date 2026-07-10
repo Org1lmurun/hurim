@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zohan & Rose - Хуримын урилга</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #fcf8f5;
+            --primary-color: #8c6239;
+            --text-dark: #333333;
+            --accent-pink: #f4e3da;
+            --wax-seal: #7a2021;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* 1. Дугтуйны хэсэг (Нүүр хуудас) */
+        #envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--accent-pink);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
+        }
+
+        .envelope {
+            width: 90%;
+            max-width: 400px;
+            height: 550px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #f0e6df;
+            padding: 20px;
+        }
+
+        /* Дугтуйны хээ угалз */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid #e0cfc5;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .wax-seal {
+            width: 80px;
+            height: 80px;
+            background-color: var(--wax-seal);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #f7dbb5;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(122, 32, 33, 0.4);
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .wax-seal:hover {
+            transform: scale(1.05);
+        }
+
+        .tap-to-open {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            animation: pulse 2s infinite;
+        }
+
+        /* Дугтуй нээгдэх хөдөлгөөн */
+        .envelope-opened {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* 2. Үндсэн агуулга */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .content-show {
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        section {
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+        }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+        }
+
+        .serif-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        /* Хуримын тов */
+        .date-badge {
+            border-top: 1px solid var(--primary-color);
+            border-bottom: 1px solid var(--primary-color);
+            padding: 10px 0;
+            margin: 15px 0;
+            font-weight: 500;
+            letter-spacing: 3px;
+        }
+
+        /* Хугацаа тоологч */
+        .countdown-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+        }
+
+        .countdown-box {
+            background: var(--bg-color);
+            padding: 15px;
+            border-radius: 8px;
+            width: 22%;
+        }
+
+        .countdown-num {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        /* Хөтөлбөрийн шугам */
+        .timeline {
+            position: relative;
+            max-width: 300px;
+            margin: 30px auto;
+            padding-left: 20px;
+            text-align: left;
+            border-left: 2px solid var(--accent-pink);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '🌸';
+            position: absolute;
+            left: -31px;
+            top: -2px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .time {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* RSVP Анкет */
+        .rsvp-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .rsvp-form label {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .rsvp-form input, .rsvp-form select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: var(--bg-color);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #6f4c2b;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="envelope-overlay">
+        <div class="envelope">
+            <div class="wax-seal" onclick="openInvitation()">Z&R</div>
+            <p class="tap-to-open">Дарж нээнэ үү</p>
+        </div>
+    </div>
+
+    <div id="main-content">
+        
+        <section>
+            <h2>Wedding Day</h2>
+            <div class="date-badge">27.09.2026</div>
+            <div class="serif-title">Zohan & Rose</div>
+            <p style="font-style: italic; color: #666;">Scroll Down</p>
+        </section>
+
+        <section>
+            <p style="font-size: 1.2rem; margin-bottom: 15px; font-weight: 500;">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+            <h3 style="color: var(--primary-color); margin-bottom: 10px;">Two Souls, One Destiny</h3>
+            <p style="color: #555; line-height: 1.6;">Амьдралын минь шинэ хуудас эхлэх нандин мөчид эрхэм таныг хүрэлцэн ирж, баяр баяслыг минь хуваалцахыг урьж байна.</p>
+        </section>
+
+        <section>
+            <h3>Celebration Begins In</h3>
+            <div class="countdown-container">
+                <div class="countdown-box"><div class="countdown-num" id="days">00</div><div class="countdown-label">Өдөр</div></div>
+                <div class="countdown-box"><div class="countdown-num" id="hours">00</div><div class="countdown-label">Цаг</div></div>
+                <div class="countdown-box"><div class="countdown-num" id="minutes">00</div><div class="countdown-label">Минут</div></div>
+                <div class="countdown-box"><div class="countdown-num" id="seconds">00</div><div class="countdown-label">Сек</div></div>
+            </div>
+        </section>
+
+        <section>
+            <h3>Schedule of Events</h3>
+            <div class="timeline">
+                <div class="timeline-item"><span class="time">17:00</span> - Зочид хүлээн авах</div>
+                <div class="timeline-item"><span class="time">18:00</span> - Гэрлэлтийн ёслол</div>
+                <div class="timeline-item"><span class="time">19:00</span> - Коктейль цаг</div>
+                <div class="timeline-item"><span class="time">20:00</span> - Хүндэтгэлийн хүлээн авалт</div>
+                <div class="timeline-item"><span class="time">21:00</span> - Бүжиг, цэнгүүн</div>
+            </div>
+        </section>
+
+        <section>
+            <h3 style="margin-bottom: 15px;">Dress Code</h3>
+            <p style="color: #555; margin-bottom: 20px;">Бид зочдоо улаан болон хүрэн улаан (maroon) өнгийн хувцаснаас татгалзахыг хүсэж байна.</p>
+            
+            <h3>Gift Preference</h3>
+            <p style="color: #555;">Хайр суурин дээр бэлэг сүндэрлэнэ үү. (Хайрцагтай том бэлгээс татгалзана уу)</p>
+        </section>
+
+        <section>
+            <h3>Confirm Your Attendance</h3>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 20px;">Та ирэх эсэхээ урьдчилан мэдэгдэнэ үү.</p>
+            
+            <form class="rsvp-form" onsubmit="submitRSVP(event)">
+                <div>
+                    <label>Таны нэр</label>
+                    <input type="text" required placeholder="Бүтэн нэрээ оруулна уу">
+                </div>
+                <div>
+                    <label>Та ирэх үү?</label>
+                    <select required>
+                        <option value="yes">Баяртайгаар оролцоно</option>
+                        <option value="no">Оролцох боломжгүй</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Дагуулж ирэх хүний тоо</label>
+                    <input type="number" min="0" max="5" value="0">
+                </div>
+                <button type="submit" class="submit-btn">Илгээх</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        // Урилга нээх функц
+        function openInvitation() {
+            const overlay = document.getElementById('envelope-overlay');
+            const content = document.getElementById('main-content');
+            
+            overlay.classList.add('envelope-opened');
+            content.classList.add('content-show');
+        }
+
+        // Хугацаа тоологч (Target: September 27, 2026)
+        const targetDate = new Date("Sep 27, 2026 17:00:00").getTime();
+
+        const countdownInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((difference % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+            document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+            document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+            document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+
+            if (difference < 0) {
+                clearInterval(countdownInterval);
+                document.querySelector(".countdown-container").innerHTML = "<p>Хурим эхэлсэн байна!</p>";
+            }
+        }, 1000);
+
+        // RSVP илгээх түр функц
+        function submitRSVP(event) {
+            event.preventDefault();
+            alert("Баярлалаа! Таны хүсэлтийг хүлээн авлаа.");
+        }
+    </script>
+</body>
+</html>
